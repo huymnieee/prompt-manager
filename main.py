@@ -96,6 +96,18 @@ def show_list():
     display_prompts(list(enumerate(prompts, start=1)))
 
 
+def show_by_category():
+    """선택한 카테고리의 프롬프트만 보여준다."""
+    print("\n=== 카테고리별 조회 ===")
+    category = choose_category()
+    items = []
+    for number, prompt in enumerate(prompts, start=1):
+        if prompt["category"] == category:
+            items.append((number, prompt))
+    print(f"[{category}] 카테고리 프롬프트:")
+    display_prompts(items)
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -109,6 +121,8 @@ def main():
                 add_prompt()
             elif choice == "2":
                 show_list()
+            elif choice == "3":
+                show_by_category()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
