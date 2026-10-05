@@ -168,6 +168,19 @@ def toggle_favorite():
     print(f"'{prompt['title']}' 프롬프트의 즐겨찾기를 {action}했습니다!")
 
 
+def show_favorites():
+    """즐겨찾기한 프롬프트만 보여준다."""
+    print("\n=== 즐겨찾기 목록 ===")
+    items = []
+    for number, prompt in enumerate(prompts, start=1):
+        if prompt["favorite"]:
+            items.append((number, prompt))
+    if not items:
+        print("즐겨찾기한 프롬프트가 없습니다.")
+        return
+    display_prompts(items)
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -189,8 +202,8 @@ def main():
                 show_detail()
             elif choice == "6":
                 toggle_favorite()
-            elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
-                print("아직 준비 중인 기능입니다.")
+            elif choice == "7":
+                show_favorites()
             else:
                 print("잘못된 메뉴 번호입니다. 0~7 중에서 선택해주세요.")
     except (EOFError, KeyboardInterrupt):
