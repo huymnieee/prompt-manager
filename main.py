@@ -1,3 +1,7 @@
+"""이전 AI 과제의 프롬프트를 관리하는 콘솔 프로그램."""
+
+CATEGORIES = ["텍스트 생성", "이미지 생성", "영상 생성", "페르소나", "자동화", "기타"]
+
 prompts = [
     {
         "title": "다이어트 멘탈 코치 페르소나",
@@ -24,4 +28,37 @@ prompts = [
         "favorite": False
     }
 ]
-print("Hello")
+
+
+def show_menu():
+    """사용할 수 있는 메뉴를 화면에 보여준다."""
+    print("\n=== 나만의 프롬프트 관리 ===")
+    print("1. 프롬프트 추가")
+    print("2. 프롬프트 목록")
+    print("3. 카테고리별 조회")
+    print("4. 프롬프트 검색")
+    print("5. 프롬프트 상세 보기")
+    print("6. 즐겨찾기 관리")
+    print("7. 즐겨찾기 목록")
+    print("0. 종료")
+
+
+def main():
+    """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
+    try:
+        while True:
+            show_menu()
+            choice = input("선택: ").strip()
+            if choice == "0":
+                print("프로그램을 종료합니다. 추가한 내용은 종료 시 초기화됩니다.")
+                break
+            elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
+                print("아직 준비 중인 기능입니다.")
+            else:
+                print("잘못된 메뉴 번호입니다. 0~7 중에서 선택해주세요.")
+    except (EOFError, KeyboardInterrupt):
+        print("\n입력이 끝나 프로그램을 종료합니다.")
+
+
+if __name__ == "__main__":
+    main()
