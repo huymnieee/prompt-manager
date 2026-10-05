@@ -79,6 +79,23 @@ def add_prompt():
     print(f"'{title}' 프롬프트가 추가되었습니다!")
 
 
+def display_prompts(items):
+    """원래 번호를 유지하여 항목과 즐겨찾기 상태를 보여준다."""
+    if not items:
+        print("표시할 프롬프트가 없습니다.")
+        return
+    for number, prompt in items:
+        star = " ⭐" if prompt["favorite"] else ""
+        print(f'{number}. [{prompt["category"]}] {prompt["title"]}{star}')
+    print(f"총 {len(items)}개의 프롬프트")
+
+
+def show_list():
+    """모든 프롬프트 목록을 보여준다."""
+    print("\n=== 프롬프트 목록 ===")
+    display_prompts(list(enumerate(prompts, start=1)))
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -90,6 +107,8 @@ def main():
                 break
             elif choice == "1":
                 add_prompt()
+            elif choice == "2":
+                show_list()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
