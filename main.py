@@ -43,6 +43,42 @@ def show_menu():
     print("0. 종료")
 
 
+def read_required(label):
+    """빈 내용을 입력하면 다시 물어본다."""
+    while True:
+        value = input(label).strip()
+        if value:
+            return value
+        print("빈 내용은 입력할 수 없습니다. 다시 입력해주세요.")
+
+
+def choose_category():
+    """정해진 카테고리 중 하나를 선택한다."""
+    print("\n카테고리 선택:")
+    for number, category in enumerate(CATEGORIES, start=1):
+        print(f"{number}) {category}")
+    while True:
+        choice = input("카테고리 번호: ").strip()
+        if choice in [str(number) for number in range(1, len(CATEGORIES) + 1)]:
+            return CATEGORIES[int(choice) - 1]
+        print("잘못된 카테고리 번호입니다. 1~6 중에서 선택해주세요.")
+
+
+def add_prompt():
+    """제목, 내용, 카테고리를 받아 새 프롬프트를 추가한다."""
+    print("\n=== 프롬프트 추가 ===")
+    title = read_required("제목: ")
+    content = read_required("내용: ")
+    category = choose_category()
+    prompts.append({
+        "title": title,
+        "content": content,
+        "category": category,
+        "favorite": False
+    })
+    print(f"'{title}' 프롬프트가 추가되었습니다!")
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -52,6 +88,8 @@ def main():
             if choice == "0":
                 print("프로그램을 종료합니다. 추가한 내용은 종료 시 초기화됩니다.")
                 break
+            elif choice == "1":
+                add_prompt()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
