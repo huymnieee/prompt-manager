@@ -85,6 +85,37 @@ class PromptManagerTests(unittest.TestCase):
         self.assertEqual(result.stdout, '')
         self.assertEqual(result.stderr, '')
 
+    def test_edit_updates_all_fields_and_preserves_favorite(self):
+        output = self.run_app('6\n1\n8\n1\n\n새 코치\n \n새 설명\n0\n5\n5\n1\n7\n0\n')
+        self.assertIn('프롬프트를 수정했습니다', output)
+        self.assertIn('제목: 새 코치', output)
+        self.assertIn('카테고리: 자동화', output)
+        self.assertIn('내용:\n새 설명', output)
+        self.assertIn('1. [자동화] 새 코치 ⭐', output)
+        self.assertEqual(output.count('빈 내용은 입력할 수 없습니다'), 2)
+
+    def test_delete_cancel_then_confirm_reindexes_items(self):
+        output = self.run_app('9\n1\nn\n2\n9\n1\ny\n2\n5\n1\n0\n')
+        self.assertIn('삭제를 취소했습니다', output)
+        self.assertIn('총 4개의 프롬프트', output)
+        self.assertIn('프롬프트를 삭제했습니다', output)
+        self.assertIn('총 3개의 프롬프트', output)
+        self.assertIn('1. [텍스트 생성] 다이어트 고민 답변 생성', output)
+
+    def test_edit_delete_empty_and_invalid_selection_are_safe(self):
+        output = self.run_app('8\n-1\n9\nabc\n0\n')
+        self.assertEqual(output.count('잘못된 번호입니다'), 2)
+        output = self.run_app('8\n9\n0\n', empty=True)
+        self.assertEqual(output.count('등록된 프롬프트가 없습니다'), 2)
+
+    def test_delete_only_selected_duplicate_and_reset_on_restart(self):
+        output = self.run_app('1\n동일 제목\n동일 내용\n6\n1\n동일 제목\n동일 내용\n6\n6\n6\n9\n6\ny\n7\n2\n0\n')
+        self.assertIn('총 5개의 프롬프트', output)
+        self.assertIn('5. [기타] 동일 제목', output)
+        self.assertIn('즐겨찾기한 프롬프트가 없습니다', output)
+        self.assertNotIn('5. [기타] 동일 제목 ⭐', output)
+        self.assertIn('총 4개의 프롬프트', self.run_app('2\n0\n'))
+
 
 if __name__ == '__main__':
     unittest.main()

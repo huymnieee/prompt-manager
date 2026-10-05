@@ -40,6 +40,8 @@ def show_menu():
     print("5. 프롬프트 상세 보기")
     print("6. 즐겨찾기 관리")
     print("7. 즐겨찾기 목록")
+    print("8. 프롬프트 수정")
+    print("9. 프롬프트 삭제")
     print("0. 종료")
 
 
@@ -181,6 +183,43 @@ def show_favorites():
     display_prompts(items)
 
 
+def edit_prompt():
+    """선택한 프롬프트를 수정하고 즐겨찾기는 유지한다."""
+    print("\n=== 프롬프트 수정 ===")
+    show_list()
+    prompt = select_prompt()
+    if prompt is None:
+        return
+    print(f"현재 제목: {prompt['title']}")
+    title = read_required("새 제목: ")
+    content = read_required("새 내용: ")
+    category = choose_category()
+    # 모든 입력이 끝난 뒤 한 번에 반영한다.
+    prompt["title"] = title
+    prompt["content"] = content
+    prompt["category"] = category
+    print("프롬프트를 수정했습니다!")
+
+
+def delete_prompt():
+    """선택한 프롬프트를 사용자가 확인하면 삭제한다."""
+    print("\n=== 프롬프트 삭제 ===")
+    show_list()
+    prompt = select_prompt()
+    if prompt is None:
+        return
+    confirm = input(f"'{prompt['title']}'을 삭제할까요? (y: 삭제 / 나머지: 취소): ").strip().casefold()
+    if confirm != "y":
+        print("삭제를 취소했습니다.")
+        return
+    # 같은 내용의 카드가 여러 개여도 선택한 객체만 삭제한다.
+    for index, item in enumerate(prompts):
+        if item is prompt:
+            del prompts[index]
+            break
+    print("프롬프트를 삭제했습니다. 목록 번호가 다시 정리됩니다.")
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -188,7 +227,7 @@ def main():
             show_menu()
             choice = input("선택: ").strip()
             if choice == "0":
-                print("프로그램을 종료합니다. 추가한 내용은 종료 시 초기화됩니다.")
+                print("프로그램을 종료합니다. 추가한 내용은 종료 시 초기화됩니다. 수정·삭제·즐겨찾기도 초기화됩니다.")
                 break
             elif choice == "1":
                 add_prompt()
@@ -204,8 +243,12 @@ def main():
                 toggle_favorite()
             elif choice == "7":
                 show_favorites()
+            elif choice == "8":
+                edit_prompt()
+            elif choice == "9":
+                delete_prompt()
             else:
-                print("잘못된 메뉴 번호입니다. 0~7 중에서 선택해주세요.")
+                print("잘못된 메뉴 번호입니다. 0~9 중에서 선택해주세요.")
     except (EOFError, KeyboardInterrupt):
         print("\n입력이 끝나 프로그램을 종료합니다.")
 
