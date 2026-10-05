@@ -108,6 +108,21 @@ def show_by_category():
     display_prompts(items)
 
 
+def search_prompt():
+    """제목과 내용에서 검색어를 찾는다."""
+    print("\n=== 프롬프트 검색 ===")
+    keyword = read_required("검색어: ").casefold()
+    items = []
+    for number, prompt in enumerate(prompts, start=1):
+        if keyword in prompt["title"].casefold() or keyword in prompt["content"].casefold():
+            items.append((number, prompt))
+    if not items:
+        print("검색 결과가 없습니다.")
+        return
+    print("검색 결과:")
+    display_prompts(items)
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -123,6 +138,8 @@ def main():
                 show_list()
             elif choice == "3":
                 show_by_category()
+            elif choice == "4":
+                search_prompt()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
