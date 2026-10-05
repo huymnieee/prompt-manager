@@ -156,6 +156,18 @@ def show_detail():
     print("────────────────────────────")
 
 
+def toggle_favorite():
+    """즐겨찾기를 추가하거나 해제한다."""
+    print("\n=== 즐겨찾기 관리 ===")
+    show_list()
+    prompt = select_prompt()
+    if prompt is None:
+        return
+    prompt["favorite"] = not prompt["favorite"]
+    action = "추가" if prompt["favorite"] else "해제"
+    print(f"'{prompt['title']}' 프롬프트의 즐겨찾기를 {action}했습니다!")
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -175,6 +187,8 @@ def main():
                 search_prompt()
             elif choice == "5":
                 show_detail()
+            elif choice == "6":
+                toggle_favorite()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
