@@ -123,6 +123,39 @@ def search_prompt():
     display_prompts(items)
 
 
+def select_prompt():
+    """번호를 확인하고 선택한 프롬프트를 돌려준다."""
+    if not prompts:
+        print("등록된 프롬프트가 없습니다.")
+        return None
+    choice = input("프롬프트 번호: ").strip()
+    try:
+        number = int(choice)
+    except ValueError:
+        print("잘못된 번호입니다. 목록에 표시된 번호를 입력해주세요.")
+        return None
+    if number < 1 or number > len(prompts):
+        print("잘못된 번호입니다. 목록에 표시된 번호를 입력해주세요.")
+        return None
+    return prompts[number - 1]
+
+
+def show_detail():
+    """선택한 프롬프트의 전체 정보를 보여준다."""
+    print("\n=== 프롬프트 상세 보기 ===")
+    show_list()
+    prompt = select_prompt()
+    if prompt is None:
+        return
+    print("────────────────────────────")
+    print(f'제목: {prompt["title"]}')
+    print(f'카테고리: {prompt["category"]}')
+    print('즐겨찾기: ' + ('⭐' if prompt["favorite"] else '없음'))
+    print("내용:")
+    print(prompt["content"])
+    print("────────────────────────────")
+
+
 def main():
     """기능을 사용한 뒤 다시 메뉴로 돌아오는 실행 흐름."""
     try:
@@ -140,6 +173,8 @@ def main():
                 show_by_category()
             elif choice == "4":
                 search_prompt()
+            elif choice == "5":
+                show_detail()
             elif choice in ["1", "2", "3", "4", "5", "6", "7"]:
                 print("아직 준비 중인 기능입니다.")
             else:
